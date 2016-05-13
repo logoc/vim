@@ -34,20 +34,9 @@ let g:syntastic_check_on_wq=0
 let g:syntastic_enable_highlighting=1
 let g:syntastic_python_python_exec='/usr/bin/python3'
 
-" 最轻量
-" let g:syntastic_python_checkers=['pyflakes'] " 使用pyflakes
-
-" 中等
 " error code: http://pep8.readthedocs.org/en/latest/intro.html#error-codes
 let g:syntastic_python_checkers=['pyflakes', 'pep8'] " 使用pyflakes,速度比pylint快
-let g:syntastic_python_pep8_args='--ignore=E501,E225,E124,E712'
-
-" 重量级, 但是足够强大, 定制完成后相当个性化
-" pylint codes: http://pylint-messages.wikidot.com/all-codes
-" let g:syntastic_python_checkers=['pyflakes', 'pylint'] " 使用pyflakes,速度比pylint快
-" let g:syntastic_python_checkers=['pylint'] " 使用pyflakes,速度比pylint快
-" let g:syntastic_python_pylint_args='--disable=C0111,R0903,C0301'
-
+let g:syntastic_python_pep8_args='--ignore=E501,E225,E124,E712,E126,E128'
 
 let g:syntastic_javascript_checkers = ['jsl', 'jshint']
 let g:syntastic_html_checkers=['tidy', 'jshint']
@@ -72,45 +61,47 @@ nnoremap <Leader>s :call ToggleErrors()<cr>
 " nnoremap <Leader>sp :lprevious<cr>
 
 
-
 " ################### 自动补全 ###################
 
 " 代码自动补全
-"迄今为止用到的最好的自动VIM自动补全插件
-"重启 :YcmRestartServer
-Bundle 'Valloric/YouCompleteMe'
-"youcompleteme  默认tab  s-tab 和自动补全冲突
-"let g:ycm_key_list_select_completion=['<c-n>']
-let g:ycm_key_list_select_completion = ['<Down>']
-"let g:ycm_key_list_previous_completion=['<c-p>']
-let g:ycm_key_list_previous_completion = ['<Up>']
-let g:ycm_complete_in_comments = 1  "在注释输入中也能补全
-let g:ycm_complete_in_strings = 1   "在字符串输入中也能补全
-let g:ycm_use_ultisnips_completer = 1 "提示UltiSnips
-let g:ycm_collect_identifiers_from_comments_and_strings = 1   "注释和字符串中的文字也会被收入补全
-let g:ycm_collect_identifiers_from_tags_files = 1
+" 迄今为止用到的最好的自动VIM自动补全插件
+" 重启 :YcmRestartServer
+" Bundle 'Valloric/YouCompleteMe'
+" youcompleteme  默认tab  s-tab 和自动补全冲突
+" let g:ycm_key_list_select_completion=['<c-n>']
+" let g:ycm_key_list_select_completion = ['<Down>']
+" let g:ycm_key_list_previous_completion=['<c-p>']
+" let g:ycm_key_list_previous_completion = ['<Up>']
+" let g:ycm_complete_in_comments = 1  "在注释输入中也能补全
+" let g:ycm_complete_in_strings = 1   "在字符串输入中也能补全
+" let g:ycm_use_ultisnips_completer = 1 "提示UltiSnips
+" let g:ycm_collect_identifiers_from_comments_and_strings = 1   "注释和字符串中的文字也会被收入补全
+" let g:ycm_collect_identifiers_from_tags_files = 1
 
 "let g:ycm_seed_identifiers_with_syntax=1   "语言关键字补全, 不过python关键字都很短，所以，需要的自己打开
 
 " 跳转到定义处, 分屏打开
-let g:ycm_goto_buffer_command = 'horizontal-split'
+" let g:ycm_goto_buffer_command = 'horizontal-split'
 " nnoremap <leader>jd :YcmCompleter GoToDefinition<CR>
-nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
-nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
+" nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+" nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
 
 " 引入，可以补全系统，以及python的第三方包 针对新老版本YCM做了兼容
 " new version
-if !empty(glob("~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"))
-    let g:ycm_global_ycm_extra_conf = "~/.ycm_extra_conf.py"
-endif
+" if !empty(glob("~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"))
+"     let g:ycm_global_ycm_extra_conf = "~/.ycm_extra_conf.py"
+" endif
 
 " 直接触发自动补全 insert模式下
 " let g:ycm_key_invoke_completion = '<C-Space>'
 " 黑名单,不启用
-let g:ycm_filetype_blacklist = {
-      \ 'tagbar' : 1,
-      \ 'gitcommit' : 1,
-      \}
+" let g:ycm_filetype_blacklist = {
+"       \ 'tagbar' : 1,
+"       \ 'gitcommit' : 1,
+"       \}
+
+" for python auto-completion
+Bundle 'davidhalter/jedi-vim'
 
 " 自动补全html/xml标签
 Bundle 'docunext/closetag.vim'
@@ -206,14 +197,6 @@ nnoremap <leader>ge :Gdiff<CR>
 " <leader>gc maps to :Gcommit<CR>
 " <leader>gp maps to :Git push<CR>
 
-" 同git diff,实时展示文件中修改的行
-" 只是不喜欢除了行号多一列, 默认关闭,gs时打开
-Bundle 'airblade/vim-gitgutter'
-let g:gitgutter_map_keys = 0
-let g:gitgutter_enabled = 0
-let g:gitgutter_highlight_lines = 1
-nnoremap <leader>gs :GitGutterToggle<CR>
-
 " edit history, 可以查看回到某个历史状态
 Bundle 'sjl/gundo.vim'
 noremap <leader>h :GundoToggle<CR>
@@ -250,6 +233,8 @@ au Syntax * RainbowParenthesesLoadBraces
 
 " 主题 molokai
 Bundle 'tomasr/molokai'
+let g:molokai_original = 1
+let g:rehash256 = 1
 
 " ################### 快速导航 ###################
 "目录导航
@@ -301,7 +286,7 @@ hi CtrlSpaceStatus   guifg=#839496 guibg=#002b36 gui=reverse term=reverse cterm=
 
 " 标签导航
 Bundle 'majutsushi/tagbar'
-nmap <F1> :TagbarToggle<CR>
+nmap <F8> :TagbarToggle<CR>
 let g:tagbar_autofocus = 1
 
 " ################### 语言相关 ###################
@@ -352,15 +337,11 @@ let g:html_indent_script1 = "inc"
 let g:html_indent_style1 = "inc"
 
 
-" for javascript 自动补全,配合YCM,需要安装nodejs&npm  see
-" https://github.com/marijnh/tern_for_vim
-" Bundle 'marijnh/tern_for_vim'
+" for javascript auto-completion
+Bundle 'marijnh/tern_for_vim'
 
 " for jquery
 Bundle 'nono/jquery.vim'
-
-" ###### emmet HTML complete #########
-" Bundle "mattn/emmet-vim"
 
 " ###### vim.less : less 自动更新##########
 " Bundle 'groenewege/vim-less'
@@ -381,7 +362,7 @@ Bundle 'Glench/Vim-Jinja2-Syntax'
 
 
 " python code format
-autocmd FileType python nnoremap <leader>y :0,$!yapf<Cr>
+autocmd FileType python nnoremap <leader>y :0,$!yapf --style='{CONTINUATION_INDENT_WIDTH: 8, DEDENT_CLOSING_BRACKETS: True}'<cr>
 
 " Bundle 'amoffat/snake'
 " I do not want to change much for default registers, just default behavior

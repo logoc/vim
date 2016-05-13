@@ -59,6 +59,7 @@ set t_ti= t_te=
 "set selection=exclusive
 set selection=inclusive
 set selectmode=mouse,key
+set mouse=
 
 " No annoying sound on errors
 " 去掉输入错误的提示声音
@@ -203,7 +204,7 @@ endif
 " F5 粘贴模式paste_mode开关,用于有格式的代码粘贴
 
 " I can type :help on my own, thanks.  Protect your fat fingers from the evils of <F1>
-noremap <F1> <Esc>"
+" noremap <F1> <Esc>"
 ""为方便复制，用<F2>开启/关闭行号显示:
 function! HideNumber()
     if(&relativenumber == &number)
