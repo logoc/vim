@@ -66,25 +66,25 @@ nnoremap <Leader>s :call ToggleErrors()<cr>
 " 代码自动补全
 " 迄今为止用到的最好的自动VIM自动补全插件
 " 重启 :YcmRestartServer
-" Bundle 'Valloric/YouCompleteMe'
+Bundle 'Valloric/YouCompleteMe'
 " youcompleteme  默认tab  s-tab 和自动补全冲突
-" let g:ycm_key_list_select_completion=['<c-n>']
-" let g:ycm_key_list_select_completion = ['<Down>']
-" let g:ycm_key_list_previous_completion=['<c-p>']
-" let g:ycm_key_list_previous_completion = ['<Up>']
-" let g:ycm_complete_in_comments = 1  "在注释输入中也能补全
-" let g:ycm_complete_in_strings = 1   "在字符串输入中也能补全
-" let g:ycm_use_ultisnips_completer = 1 "提示UltiSnips
-" let g:ycm_collect_identifiers_from_comments_and_strings = 1   "注释和字符串中的文字也会被收入补全
-" let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_key_list_select_completion=['<c-n>']
+let g:ycm_key_list_select_completion = ['<Down>']
+let g:ycm_key_list_previous_completion=['<c-p>']
+let g:ycm_key_list_previous_completion = ['<Up>']
+let g:ycm_complete_in_comments = 1  "在注释输入中也能补全
+let g:ycm_complete_in_strings = 1   "在字符串输入中也能补全
+let g:ycm_use_ultisnips_completer = 1 "提示UltiSnips
+let g:ycm_collect_identifiers_from_comments_and_strings = 1   "注释和字符串中的文字也会被收入补全
+let g:ycm_collect_identifiers_from_tags_files = 1
 
-"let g:ycm_seed_identifiers_with_syntax=1   "语言关键字补全, 不过python关键字都很短，所以，需要的自己打开
+let g:ycm_seed_identifiers_with_syntax=1   "语言关键字补全, 不过python关键字都很短，所以，需要的自己打开
 
 " 跳转到定义处, 分屏打开
-" let g:ycm_goto_buffer_command = 'horizontal-split'
-" nnoremap <leader>jd :YcmCompleter GoToDefinition<CR>
-" nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
-" nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
+let g:ycm_goto_buffer_command = 'horizontal-split'
+nnoremap <leader>jd :YcmCompleter GoToDefinition<CR>
+nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
 
 " 引入，可以补全系统，以及python的第三方包 针对新老版本YCM做了兼容
 " new version
@@ -100,23 +100,9 @@ nnoremap <Leader>s :call ToggleErrors()<cr>
 "       \ 'gitcommit' : 1,
 "       \}
 
-" for python auto-completion
-Bundle 'davidhalter/jedi-vim'
-
 " 自动补全html/xml标签
 Bundle 'docunext/closetag.vim'
 let g:closetag_html_style=1
-
-" ################### 快速编码 ###################
-
-" 快速赋值语句对齐
-Bundle 'junegunn/vim-easy-align'
-vmap <Leader>a <Plug>(EasyAlign)
-nmap <Leader>a <Plug>(EasyAlign)
-if !exists('g:easy_align_delimiters')
-    let g:easy_align_delimiters = {}
-endif
-let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignore_groups': ['String'] }
 
 " ################### 快速移动 ###################
 

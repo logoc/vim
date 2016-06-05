@@ -47,33 +47,18 @@ if has('persistent_undo')
 endif
 
 set wildignore=*.swp,*.bak,*.pyc,*.class,.svn
-" 突出显示当前行等
+" 突出显示当前列
 set cursorcolumn
-" 突出显示当前行
-set cursorline
 
 "设置 退出vim后，内容显示在终端屏幕, 可以用于查看和复制
 set t_ti= t_te=
 
-" 修复ctrl+m 多光标操作选择的bug，但是改变了ctrl+v进行字符选中时将包含光标下的字符
-"set selection=exclusive
-set selection=inclusive
-set selectmode=mouse,key
-set mouse=
-
 " No annoying sound on errors
-" 去掉输入错误的提示声音
-set title                " change the terminal's title
-set novisualbell         " don't beep
-set noerrorbells         " don't beep
-set t_vb=
-set tm=500
+set novisualbell
+set noerrorbells
 
 " Remember info about open buffers on close"
 set viminfo^=%
-
-" For regular expressions turn magic on
-set magic
 
 " Configure backspace so it acts as it should act
 set backspace=eol,start,indent
@@ -81,7 +66,7 @@ set backspace=eol,start,indent
 "==========================================
 " Display Settings 展示/排版等界面格式设置
 "==========================================
-"
+
 " 显示当前的行号列号：
 set ruler
 " 在状态栏显示正在输入的命令
@@ -96,8 +81,6 @@ set laststatus=2
 
 " 括号配对情况,跳转并高亮一下匹配的括号
 set showmatch
-" How many tenths of a second to blink when matching brackets
-set matchtime=2
 
 " 设置文内智能搜索提示
 " 打开增量搜索模式,随着键入即时搜索
@@ -144,8 +127,6 @@ set smarttab      " insert tabs on the start of a line according to shiftwidth, 
 set expandtab     " 将Tab自动转化成空格    [需要输入真正的Tab键时，使用 Ctrl+V + Tab]
 set shiftround    " 缩进时，取整 use multiple of shiftwidth when indenting with '<' and '>'
 
-" A buffer becomes hidden when it is abandoned
-set hidden
 set wildmode=list:longest
 set ttyfast
 
@@ -159,7 +140,6 @@ set nrformats=
 set encoding=utf-8
 " 自动判断编码时，依次尝试以下编码：
 set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
-set helplang=cn
 
 " 下面这句只影响普通模式 (非图形界面) 下的 Vim。
 set termencoding=utf-8
@@ -177,6 +157,7 @@ set formatoptions+=B
 " 让Vim的补全菜单行为与一般IDE一致(参考VimTip1228)
 " set completeopt=longest,menu
 
+set hidden
 " 增强模式中的命令行自动完成操作
 set wildmenu
 " Ignore compiled files
@@ -195,75 +176,18 @@ endif
 "==========================================
 " HotKey Settings  自定义快捷键设置
 "==========================================
-
-" 主要按键重定义
-
-" F1 - F6 设置
-" F1 废弃这个键,防止调出系统帮助
-" F2 行号开关，用于鼠标复制代码用
-" F5 粘贴模式paste_mode开关,用于有格式的代码粘贴
-
-" I can type :help on my own, thanks.  Protect your fat fingers from the evils of <F1>
-" noremap <F1> <Esc>"
-""为方便复制，用<F2>开启/关闭行号显示:
-function! HideNumber()
-    if(&relativenumber == &number)
-        set relativenumber! number!
-    elseif(&number)
-        set number!
-    else
-        set relativenumber!
-    endif
-    set number?
-endfunc
-nnoremap <F2> :call HideNumber()<CR>
+"
 set pastetoggle=<F5>
 
 " disbale paste mode when leaving insert mode
 au InsertLeave * set nopaste
 
-
-" Go to home and end using capitalized directions
-noremap H ^
-noremap L $
-
-
 "Map ; to : and save a million keystrokes
 " ex mode commands made easy 用于快速进入命令行
 nnoremap ; :
 
-
-" 搜索相关
-
 " for # indent, python文件中输入新行时#号注释不切回行首
 autocmd BufNewFile,BufRead *.py inoremap # X<c-h>#
-
-" --------tab/buffer相关
-
-"Use arrow key to change buffer"
-" TODO: 如何跳转到确定的buffer?
-" :b1 :b2   :bf :bl
-nnoremap [b :bprevious<cr>
-nnoremap ]b :bnext<cr>
-
-
-" tab 操作
-" TODO: ctrl + n 变成切换tab的方法
-" http://vim.wikia.com/wiki/Alternative_tab_navigation
-" http://stackoverflow.com/questions/2005214/switching-to-a-particular-tab-in-vim
-"map <C-2> 2gt
-map <leader>th :tabfirst<cr>
-map <leader>tl :tablast<cr>
-
-map <leader>tj :tabnext<cr>
-map <leader>tk :tabprev<cr>
-map <leader>tn :tabnext<cr>
-map <leader>tp :tabprev<cr>
-
-map <leader>te :tabedit<cr>
-map <leader>td :tabclose<cr>
-map <leader>tm :tabm<cr>
-
 
 " 新建tab  Ctrl+t
 nnoremap <C-t> :tabnew<CR>
@@ -291,8 +215,7 @@ nnoremap <silent> <leader>tt :execute 'tabnext ' . g:last_active_tab<cr>
 vnoremap <silent> <leader>tt :execute 'tabnext ' . g:last_active_tab<cr>
 autocmd TabLeave * let g:last_active_tab = tabpagenr()
 
-
-" ------- 选中及操作改键
+" 选中及操作改键
 
 "Reselect visual block after indent/outdent.调整缩进后自动选中，方便再次操作
 vnoremap < <gv
@@ -301,18 +224,8 @@ vnoremap > >gv
 " 复制选中区到系统剪切板中
 vnoremap <leader>y "+y
 
-" auto jump to end of select
-" vnoremap <silent> y y`]
-" vnoremap <silent> p p`]
-" nnoremap <silent> p p`]
-
 " w!! to sudo & write a file
 cmap w!! w !sudo tee >/dev/null %
-
-"Jump to start and end of line using the home row keys
-" 增强tab操作, 导致这个会有问题, 考虑换键
-"nmap t o<ESC>k
-"nmap T O<ESC>j
 
 " Quickly close the current window
 nnoremap <leader>q :q<CR>
