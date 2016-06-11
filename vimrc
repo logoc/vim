@@ -50,8 +50,11 @@ set wildignore=*.swp,*.bak,*.pyc,*.class,.svn
 " 突出显示当前列
 set cursorcolumn
 
-"设置 退出vim后，内容显示在终端屏幕, 可以用于查看和复制
+" 设置 退出vim后，内容显示在终端屏幕, 可以用于查看和复制
 set t_ti= t_te=
+
+" 禁用鼠标
+set mouse=
 
 " No annoying sound on errors
 set novisualbell
@@ -82,7 +85,6 @@ set laststatus=2
 " 括号配对情况,跳转并高亮一下匹配的括号
 set showmatch
 
-" 设置文内智能搜索提示
 " 打开增量搜索模式,随着键入即时搜索
 set incsearch
 " 搜索时忽略大小写
@@ -90,44 +92,25 @@ set ignorecase
 " 有一个或以上大写字母时仍大小写敏感
 set smartcase
 
-" 代码折叠
-set foldenable
+" 打开文件后代码不折叠
+set nofoldenable
 " 折叠方法
-" manual    手工折叠
-" indent    使用缩进表示折叠
-" expr      使用表达式定义折叠
-" syntax    使用语法定义折叠
-" diff      对没有更改的文本进行折叠
-" marker    使用标记进行折叠, 默认标记是 {{{ 和 }}}
 set foldmethod=indent
-set foldlevel=99
-" 代码折叠自定义快捷键
-let g:FoldMethod = 0
-map <leader>zz :call ToggleFold()<cr>
-fun! ToggleFold()
-    if g:FoldMethod == 0
-        exe "normal! zM"
-        let g:FoldMethod = 1
-    else
-        exe "normal! zR"
-        let g:FoldMethod = 0
-    endif
-endfun
 
 " 缩进配置
-
 set smartindent   " Smart indent
 set autoindent    " 打开自动缩进
 
 " tab相关变更
-set tabstop=4     " 设置Tab键的宽度        [等同的空格个数]
+set tabstop=4     " 设置Tab键的宽度
 set shiftwidth=4  " 每一次缩进对应的空格数
 set softtabstop=4 " 按退格键时可以一次删掉 4 个空格
 set smarttab      " insert tabs on the start of a line according to shiftwidth, not tabstop 按退格键时可以一次删掉 4 个空格
 set expandtab     " 将Tab自动转化成空格    [需要输入真正的Tab键时，使用 Ctrl+V + Tab]
 set shiftround    " 缩进时，取整 use multiple of shiftwidth when indenting with '<' and '>'
 
-set wildmode=list:longest
+" 性能改善
+set lazyredraw
 set ttyfast
 
 " 00x增减数字时使用十进制
@@ -153,20 +136,13 @@ set formatoptions+=B
 " others 其它设置
 "==========================================
 
-" 自动补全配置
-" 让Vim的补全菜单行为与一般IDE一致(参考VimTip1228)
-" set completeopt=longest,menu
-
-set hidden
-" 增强模式中的命令行自动完成操作
-set wildmenu
 " Ignore compiled files
 set wildignore=*.o,*~,*.pyc,*.class
 
 " 离开插入模式后自动关闭预览窗口
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 " 回车即选中当前项
-inoremap <expr> <CR>     pumvisible() ? "\<C-y>" : "\<CR>"
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 
 " if this not work ,make sure .viminfo is writable for you
 if has("autocmd")
@@ -176,17 +152,15 @@ endif
 "==========================================
 " HotKey Settings  自定义快捷键设置
 "==========================================
-"
-set pastetoggle=<F5>
 
+set pastetoggle=<F5>
 " disbale paste mode when leaving insert mode
 au InsertLeave * set nopaste
 
 "Map ; to : and save a million keystrokes
-" ex mode commands made easy 用于快速进入命令行
 nnoremap ; :
 
-" for # indent, python文件中输入新行时#号注释不切回行首
+" python文件中输入新行时#号注释不切回行首
 autocmd BufNewFile,BufRead *.py inoremap # X<c-h>#
 
 " 新建tab  Ctrl+t
@@ -227,39 +201,12 @@ vnoremap <leader>y "+y
 " w!! to sudo & write a file
 cmap w!! w !sudo tee >/dev/null %
 
-" Quickly close the current window
-nnoremap <leader>q :q<CR>
-" Quickly save the current file
-nnoremap <leader>w :w<CR>
-
 " remap U to <C-r> for easier redo
 nnoremap U <C-r>
 
 " Quickly edit/reload the vimrc file
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
-
-" Automatically set paste mode in Vim when pasting in insert mode
-function! WrapForTmux(s)
-    if !exists('$TMUX')
-        return a:s
-    endif
-
-    let tmux_start = "\<Esc>Ptmux;"
-    let tmux_end = "\<Esc>\\"
-
-    return tmux_start . substitute(a:s, "\<Esc>", "\<Esc>\<Esc>", 'g') . tmux_end
-endfunction
-
-let &t_SI .= WrapForTmux("\<Esc>[?2004h")
-let &t_EI .= WrapForTmux("\<Esc>[?2004l")
-
-function! XTermPasteBegin()
-    set pastetoggle=<Esc>[201~
-    set paste
-    return ""
-endfunction
-inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 
 "==========================================
 " FileType Settings  文件类型设置
@@ -285,7 +232,6 @@ function! AutoSetFileHead()
     normal o
     normal o
 endfunc
-
 
 " set some keyword to highlight
 if has("autocmd")
@@ -313,23 +259,9 @@ if has("gui_running")
     set guifont=DejaVu\ Sans\ Mono\ 14
 endif
 
-" allows cursor change in tmux mode
-if exists('$TMUX')
-    let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-    let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-else
-    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-endif
-
 " theme主题
 set t_Co=256
 colorscheme molokai
-
-" 设置标记一列的背景颜色和数字一行颜色一致
-hi! link SignColumn   LineNr
-hi! link ShowMarksHLl DiffAdd
-hi! link ShowMarksHLu DiffChange
 
 " for error highlight，防止错误整行标红导致看不清
 highlight clear SpellBad
