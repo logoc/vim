@@ -30,7 +30,10 @@ let g:syntastic_python_python_exec = '/usr/bin/python3'
 
 " pyflakes is faster than pylint
 let g:syntastic_python_checkers = ['pyflakes', 'pep8']
-let g:syntastic_python_pep8_args = '--ignore=E501,E225,E124,E712,E126,E128'
+" pyflakes is faster than pylint
+let g:syntastic_javascript_checkers = ['jshint']
+" let g:syntastic_python_pep8_args = '--ignore=E501,E225,E124,E712,E126,E128'
+let g:loaded_syntastic_java_javac_checker = 1
 
 " enable check for c/cpp files
 let g:ycm_show_diagnostics_ui = 0
@@ -59,9 +62,6 @@ nnoremap <leader>jd :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
 
-" python auto-completion
-Bundle 'davidhalter/jedi-vim'
-
 " for javascript auto-completion
 Bundle 'marijnh/tern_for_vim'
 
@@ -76,6 +76,9 @@ Bundle 'derekwyatt/vim-scala'
 " html/xml tag auto-completion
 Bundle 'docunext/closetag.vim'
 let g:closetag_html_style = 1
+
+" html indent
+Bundle 'vim-scripts/indenthtml.vim'
 
 " ################### 功能相关 ###################
 
@@ -153,12 +156,13 @@ Bundle 'bling/vim-airline'
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
-let g:airline_left_sep = '▶'
-let g:airline_left_alt_sep = '❯'
-let g:airline_right_sep = '◀'
-let g:airline_right_alt_sep = '❮'
-let g:airline_symbols.linenr = '¶'
-let g:airline_symbols.branch = '⎇'
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
 " 是否打开tabline
 " let g:airline#extensions#tabline#enabled = 1
 
@@ -181,7 +185,7 @@ let g:rehash256 = 1
 " ################### 快速导航 ###################
 "目录导航
 Bundle 'scrooloose/nerdtree'
-map <F3> :NERDTreeToggle<CR>
+map <F3> :NERDTreeMirrorToggle<CR>
 let NERDTreeHighlightCursorline = 1
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$', '\.obj$', '\.o$', '\.so$', '\.egg$', '^\.git$', '^\.svn$', '^\.hg$']
 "close vim if the only window left open is a NERDTree
